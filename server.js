@@ -1,61 +1,33 @@
-// Add this at the top of your server.js file, right after require('dotenv').config();
 const express = require('express');
 require('dotenv').config();
-const admin = require('firebase-admin');
-const serviceAccount = require('./keys/service-account-key.json');
+// Import firebase configuration
+const { db } = require('./config/firebase');
 
-// Initialize Firebase
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Import routes
+const studentRoutes = require('./routes/studentRoutes');
 
 // Middleware
 app.use(express.json());
 
-// Simple route to test Firebase connection and get students 
-// /test-students - api endpoint
+// Routes
+app.use('/api/students', studentRoutes);
 
-app.get('/test-students', async (req, res) => {
-  try {
-    // Access the exact path you showed in the screenshot
-    const studentsRef = db.collection('IIT').doc('Users').collection('students');
-    const snapshot = await studentsRef.get();
-    
-    if (snapshot.empty) {
-      return res.status(200).json({
-        success: true,
-        message: 'Connected to Firebase successfully, but no student documents found',
-        data: []
-      });
-    }
-    
-    // Convert the data to a more manageable format
-    const students = [];
-    snapshot.forEach(doc => {
-      students.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
-    
-    return res.status(200).json({
-      success: true,
-      message: 'Successfully connected to Firebase and retrieved students',
-      count: students.length,
-      data: students
-    });
-  } catch (error) {
-    console.error('Error connecting to Firebase:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to connect to Firebase or retrieve students', 
-      error: error.message
-    });
-  }
+// Basic health check
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: err.message || 'Server Error',
+    error: process.env.NODE_ENV === 'production' ? {} : err.stack
+  });
 });
 
 // Start server
