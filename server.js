@@ -8,12 +8,14 @@ const PORT = process.env.PORT || 5000;
 
 // Import routes
 const studentRoutes = require('./routes/studentRoutes');
+const lecturerRoutes = require('./routes/lecturerRoutes');
 
 // Middleware
 app.use(express.json());
 
 // Routes
 app.use('/api/students', studentRoutes);
+app.use('/api/lecturers', lecturerRoutes);
 
 // Basic health check
 app.get('/health', (req, res) => {
