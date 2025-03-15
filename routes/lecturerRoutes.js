@@ -12,4 +12,7 @@ router.get('/requests/status/:status', lecturerController.getLecturerRequestsByS
 // Get a single lecturer request by ID
 router.get('/requests/:id', lecturerController.getLecturerRequestById);
 
+// In lecturerRoutes.js
+router.put('/requests/:id/status', lecturerController.updateLecturerRequestStatus);
+
 module.exports = router;

@@ -78,4 +78,31 @@ exports.getLecturerRequestById = async (req, res) => {
     console.error('Error getting lecturer request:', error);
     res.status(500).json({ error: 'Failed to fetch lecturer request' });
   }
+}; 
+
+  // Update lecturer request status
+exports.updateLecturerRequestStatus = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      
+      // Update the document in Firebase
+      await db.collection('IIT')
+        .doc('reservation')
+        .collection('lecturers')
+        .doc(id)
+        .update({ status });
+      
+      // Emit a WebSocket event to notify all clients
+      req.io.to('lecturer-requests').emit('lecturerRequestUpdate', {
+        type: 'statusChange',
+        requestId: id,
+        status
+      });
+      
+      res.json({ success: true, message: `Request ${status} successfully` });
+    } catch (error) {
+      console.error('Error updating lecturer request status:', error);
+      res.status(500).json({ error: 'Failed to update request status' });
+    }
 };
