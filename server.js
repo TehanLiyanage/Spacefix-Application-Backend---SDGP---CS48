@@ -147,7 +147,7 @@ const io = socketIo(server, {
 const PORT = process.env.PORT || 5000;
 
 // Import routes
-const studentRoutes = require('./routes/studentRoutes');
+// const studentRoutes = require('./routes/studentRoutes');
 const lecturerReservationRoutes = require('./routes/lecturerReservationRoutes');
 const studentReservationRoutes = require('./routes/studentReservationRoutes');
 
@@ -167,7 +167,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/students', studentRoutes);
+// app.use('/api/students', studentRoutes);
 app.use('/api/lecturer', lecturerReservationRoutes);
 app.use('/api/studentsreservation', studentReservationRoutes);
 
