@@ -5,7 +5,9 @@ const corsOptions = {
       'http://localhost:5173',
       'http://127.0.0.1:3000',
       'http://127.0.0.1:5173',
-      'https://www.spacefix.lk'
+      'https://www.spacefix.lk',
+      'https://spacefix.lk',
+      'https://spacefix-application-backend-sdgp-cs48.onrender.com'
       // Add your production domains here when deploying
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
