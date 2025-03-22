@@ -1,4 +1,3 @@
-// routes/lostItems.js
 const express = require('express');
 const router = express.Router();
 const { db } = require('../config/firebase');
@@ -6,7 +5,7 @@ const { db } = require('../config/firebase');
 // POST: Report Lost Item
 router.post('/lostitems', async (req, res) => {
   try {
-    const { category, itemName, location, description, userId } = req.body;
+    const { category, itemName, location, description, userEmail } = req.body;
 
     const newItem = {
       category,
@@ -14,7 +13,7 @@ router.post('/lostitems', async (req, res) => {
       location,
       description,
       status: 'Lost',
-      userId,
+      userEmail, // Changed from userId to userEmail
       date: new Date().toISOString().split('T')[0] // Format: YYYY-MM-DD
     };
 
@@ -25,17 +24,17 @@ router.post('/lostitems', async (req, res) => {
   }
 });
 
-// GET: My Lost Items by User ID
-router.get('/lostitems/:userId', async (req, res) => {
+// GET: My Lost Items by User Email
+router.get('/lostitems/:userEmail', async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userEmail } = req.params;
 
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
+    if (!userEmail) {
+      return res.status(400).json({ error: 'User email is required' });
     }
 
     const snapshot = await db.collection('IIT').doc('LostItems').collection('Items')
-      .where('userId', '==', userId)
+      .where('userEmail', '==', userEmail)
       .get();
 
     const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -45,7 +44,7 @@ router.get('/lostitems/:userId', async (req, res) => {
   }
 });
 
-// PATCH: Mark Item as Found
+// PATCH: Mark Item as Found (Status Updated Only)
 router.patch('/lostitems/found/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -70,7 +69,7 @@ router.delete('/lostitems/:id', async (req, res) => {
   }
 });
 
-// GET: Found Items from LostItems Collection where status === "Found"
+// GET: Found Items (status === 'Found' from LostItems Collection)
 router.get('/founditems', async (req, res) => {
   try {
     const snapshot = await db.collection('IIT').doc('LostItems').collection('Items')
