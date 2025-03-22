@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "*", // In production, specify your frontend URL
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PATCH", "DELETE"],  // Added PATCH, DELETE for completeness
     credentials: true
   }
 });
@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 5000;
 // Import routes
 const studentRoutes = require('./routes/studentRoutes');
 const lecturerRoutes = require('./routes/lecturerRoutes');
+const lostItemsRoutes = require('./routes/lostItems');  // ✅ New import
 
 // Middleware
 app.use(cors());
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/students', studentRoutes);
 app.use('/api/lecturers', lecturerRoutes);
+app.use('/api', lostItemsRoutes);  // ✅ Register Lost Items API
 
 // Basic health check
 app.get('/health', (req, res) => {
