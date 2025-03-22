@@ -1,4 +1,5 @@
 
+
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -70,7 +71,7 @@ io.on('connection', (socket) => {
   // Listen for client joining a room
   socket.on('joinRoom', async (room) => {
     socket.join(room);
-    console.log(Client ${socket.id} joined room: ${room});
+    console.log(`Client ${socket.id} joined room: ${room}`);
     
     // Send initial data when client joins lecturer-requests room
     if (room === 'lecturer-requests') {
@@ -145,25 +146,25 @@ app.use((err, req, res, next) => {
 
 // Handle 404 errors
 app.use((req, res) => {
-  console.log(404 - Route not found: ${req.method} ${req.originalUrl});
+  console.log(`404 - Route not found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
     success: false,
-    message: Route not found: ${req.method} ${req.originalUrl}
+    message: `Route not found: ${req.method} ${req.originalUrl}`
   });
 });
 
 // Start server
 server.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
-  console.log(Health check available at http://localhost:${PORT}/health);
-  console.log(Test endpoint available at http://localhost:${PORT}/api/test);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Health check available at http://localhost:${PORT}/health`);
+  console.log(`Test endpoint available at http://localhost:${PORT}/api/test`);
 });
 
 // Handle server errors
 server.on('error', (error) => {
   console.error('Server failed to start:', error);
   if (error.code === 'EADDRINUSE') {
-    console.error(Port ${PORT} is already in use. Please try a different port.);
+    console.error(`Port ${PORT} is already in use. Please try a different port.`);
   }
 });
 
@@ -176,4 +177,3 @@ process.on('uncaughtException', (error) => {
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Promise Rejection:', reason);
 });
-

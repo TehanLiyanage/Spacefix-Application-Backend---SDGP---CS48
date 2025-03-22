@@ -14,7 +14,5 @@ router.get('/:id', classroomController.getClassroomById);
 // Get route between two classrooms
 router.get('/route/:from/:to', classroomController.getRoute);
 
-// Initialize default classrooms (for development)
-router.post('/initialize', classroomController.initializeClassrooms);
 
 module.exports = router;
