@@ -25,6 +25,7 @@ const studentRoutes = require('./routes/studentRoutes');
 const lecturerReservationRoutes = require('./routes/lecturerReservationRoutes');
 const studentReservationRoutes = require('./routes/studentReservationRoutes');
 const lostItemsRoutes = require('./routes/lostItems'); 
+const classroomRoutes = require('./routes/classroomRoutes');
 
 // Middleware
 app.use(cors({
@@ -45,6 +46,7 @@ app.use('/api/students', studentRoutes);
 app.use('/api/lecturer', lecturerReservationRoutes);
 app.use('/api/studentsreservation', studentReservationRoutes);
 app.use('/api', lostItemsRoutes); 
+app.use('/api/classrooms', classroomRoutes);
 
 // Basic health check
 app.get('/health', (req, res) => {
